@@ -69,7 +69,7 @@ function App() {
         if (data.ok === true) {
           var len = data.result.length;
           var m = '';
-          for (i = 0; i < len; i++) {
+          for (var i = 0; i < len; i++) {
             var kl =
               ' Chat ID: ' +
               data.result[i].message.chat.id +
