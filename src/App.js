@@ -15,8 +15,6 @@ import {
   Container,
   Text,
   Textarea,
-  InputGroup,
-  IconButton,
   InputLeftElement,
 } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
