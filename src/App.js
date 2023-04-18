@@ -15,6 +15,7 @@ import {
   Container,
   Text,
   Textarea,
+  InputGroup,
   IconButton,
   InputLeftElement,
 } from '@chakra-ui/react';
@@ -22,7 +23,7 @@ import { Button } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { FcManager, FcVoicePresentation } from 'react-icons/fc';
-import { MdSend, MdLogin, MdLogout } from 'react-icons/md';
+import { MdSend, MdLogin } from 'react-icons/md';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -33,65 +34,14 @@ function App() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [sendmessage, setSentMessage] = useState('');
-  const [botname, setbotname] = useState('');
-  const [rmessage, setrmessage] = useState(' ');
   useEffect(() => {
-    const user = localStorage.getItem('Auth');
-    let bot_request_url = 'https://api.telegram.org/bot' + user + '/getUpdates';
+    const user = localStorage.getItem('userInfo');
 
-    fetch(bot_request_url)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok === true) {
-          setIsAuth(true);
-          setBotTocken(user);
-          setbotname(user.split(':')[0]);
-        } else if (
-          data.ok == false &&
-          data.error_code &&
-          data.error_code === 401
-        ) {
-          localStorage.removeItem('Auth');
-          setIsAuth(false);
-        }
-      });
+    if (user) history.push('/home');
   }, [isAuth]);
 
   const toast = useToast();
   const history = useHistory();
-  function messagesRead() {
-    let bot_request_url =
-      'https://api.telegram.org/bot' + bottocken + '/getUpdates';
-
-    fetch(bot_request_url)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok === true) {
-          var len = data.result.length;
-          var m = '';
-          for (var i = 0; i < len; i++) {
-            var kl =
-              ' Chat ID: ' +
-              data.result[i].message.chat.id +
-              ' Date: ' +
-              new Date(data.result[i].message.date * 1000).toLocaleDateString(
-                'it-IT'
-              ) +
-              ' Name: ' +
-              data.result[i].message.chat.first_name +
-              +' Message: ' +
-              data.result[i].message.text;
-            m += `<Text>` + kl + `</Text>`;
-            console.log(kl);
-          }
-        } else if (data.ok === false) {
-          var m = 'none';
-        } else {
-          var m = 'none';
-        }
-        setrmessage(m);
-      });
-  }
   const loginHandler = async () => {
     if (!bottocken) {
       toast({
@@ -147,11 +97,7 @@ function App() {
       });
     return;
   };
-  const logouthand = async () => {
-    localStorage.removeItem('Auth');
-    setBotTocken('');
-    setIsAuth(false);
-  };
+
   const submitHandler = async () => {
     setLoading(true);
     if (!bottocken || !userid) {
@@ -243,11 +189,12 @@ function App() {
       >
         <Text
           fontSize="4xl"
-          fontFamily="Times New Roman "
+          fontFamily="Open Sans, sans-serif, bold, Arvo "
           color={'white'}
           align="center"
         >
-          {'Telegram Bot Reply :)'}
+          {' '}
+          Telegram Bot Reply{' '}
         </Text>
         <Text
           fontSize="2xl"
@@ -255,33 +202,15 @@ function App() {
           color={'green'}
           align="center"
         >
-          {'Send messages via Telegram Bot'}
+          {' '}
+          Send messages via Telegram Bot{' '}
         </Text>
-        <br />
-        {isAuth ? (
-          <center>
-            <Button
-              leftIcon={<MdLogout />}
-              colorScheme={'blue'}
-              onClick={logouthand}
-              aria-label="Call Sage"
-              fontSize="20px"
-            >
-              {'LOGOUT'}
-            </Button>
-            <br />
-          </center>
-        ) : (
-          <></>
-        )}
       </Box>
       {isAuth ? (
         <Box bg={'black'} w="100%" p={4} borderRadius="lg" borderWidth="1px">
           <Tabs isFitted variant="soft-rounded">
             <TabList mb="1em">
-              <Tab>SEND</Tab>
-              <Tab>MESSAGE</Tab>
-              <Tab>HELP</Tab>
+              <Tab>LOGIN</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -329,7 +258,7 @@ function App() {
                       aria-label="Call Sage"
                       fontSize="20px"
                     >
-                      {'SEND'}
+                      Button{' '}
                     </Button>
                   </VStack>
                 </Box>
@@ -380,34 +309,13 @@ function App() {
                       aria-label="Call Sage"
                       fontSize="20px"
                     >
-                      {'Login'}
+                      Login{' '}
                     </Button>
                   </VStack>
                 </Box>
               </TabPanel>
               <TabPanel>
-                <Text
-                  fontSize="2xl"
-                  fontFamily="Open Sans, sans-serif, bold, Arvo"
-                  color={'white'}
-                  align="center"
-                >
-                  {' '}
-                  {'1. Open @BotFather in Telegram'}{' '}
-                </Text>
-                <Text
-                  fontSize="2xl"
-                  fontFamily="Open Sans, sans-serif, bold, Arvo"
-                  color={'white'}
-                  align="center"
-                >
-                  {' '}
-                  {'2. Get your bot token'}{' '}
-                </Text>
-              </TabPanel>
-              <TabPanel>
-                {messagesRead()}
-                <Text>{rmessage}</Text>
+                Open @BotFather in Telegram Get your bot token
               </TabPanel>
             </TabPanels>
           </Tabs>
